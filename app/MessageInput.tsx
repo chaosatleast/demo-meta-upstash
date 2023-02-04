@@ -5,9 +5,14 @@ import { Message } from "../typings";
 import useSWR from "swr";
 import messageFetcher from "../utils/messageFetcher";
 import { clientPusher } from "../pusher/clientPusher";
-function MessageInput() {
+import { getServerSession } from "next-auth";
+import { useSession } from "next-auth/react";
+type Props = {
+  session: Awaited<ReturnType<typeof getServerSession>>;
+};
+function MessageInput({ session }: Props) {
   const [input, setInput] = useState("");
-
+  const { data: sessionUser } = useSession();
   const {
     data: messages,
     error,
@@ -29,8 +34,8 @@ function MessageInput() {
       id,
       message: contentToSend,
       created_at: Date.now(),
-      username: "Alice",
-      email: "acxy9@gmail.com",
+      username: sessionUser?.user?.name!,
+      email: sessionUser?.user?.email!,
     };
 
     const uploadMessageToServer = async () => {
@@ -62,9 +67,11 @@ function MessageInput() {
         placeholder="Enter your message..."
         type="text"
         value={input}
+        disabled={!session}
         onChange={(e) => setInput(e.target.value)}
       />
       <button
+        disabled={!input}
         type="submit"
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed"
       >

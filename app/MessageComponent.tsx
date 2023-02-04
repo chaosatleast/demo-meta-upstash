@@ -1,7 +1,10 @@
 import { Message } from "../typings";
+import { useSession } from "next-auth/react";
 export default function MessageComponent(props: any) {
   const { message } = props;
-  const isUser = false;
+
+  const { data: session } = useSession();
+  const isUser = session?.user?.email === message.email;
   return (
     <div
       className={`h-auto flex items-end pb-1 w-fit  ${isUser && "ml-auto"}  `}

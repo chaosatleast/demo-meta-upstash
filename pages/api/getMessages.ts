@@ -18,9 +18,12 @@ export default async function handler(
   }
 
   const messageResponse = await redis.hvals("messages");
-  const messages: Message[] = messageResponse
-    .map((message) => JSON.parse(message))
-    .sort((a, b) => a.created_at - b.created_at);
+  const messages: Message[] = messageResponse.map((message) =>
+    JSON.parse(message)
+  );
+  const sortedMesage: Message[] = messages.sort(
+    (a, b) => a.created_at - b.created_at
+  );
 
-  res.status(200).json({ message: messages });
+  res.status(200).json({ message: sortedMesage });
 }
