@@ -1,5 +1,6 @@
 import { Message } from "../typings";
 import { useSession } from "next-auth/react";
+import ReactTimeago from "react-timeago";
 export default function MessageComponent(props: any) {
   const { message } = props;
 
@@ -28,7 +29,7 @@ export default function MessageComponent(props: any) {
       </div>
       <div>
         <p className="text-[10px] italic px-2 text-gray-400">
-          {new Date(message.created_at).toLocaleDateString()}
+          <ReactTimeago date={new Date(message.created_at)} />
         </p>
       </div>
     </div>
